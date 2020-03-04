@@ -29,7 +29,7 @@ userSchema.pre("save", async function (next) { //async, await 같이 사용.
    try{
        // avatar이미지 생성,
        console.log('entered');
-       const avatar = await gravatar.url(this.username, { //아바타를 username 기반으로 생성
+       const avatar = await gravatar.url(this.email, { //아바타를 username 기반으로 생성
            s: '200',
            r: 'pg',
            d: 'mm'
