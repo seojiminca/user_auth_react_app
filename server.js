@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+const userRouter = require("./router/user");
+
 // DB connect
 const db = 'mongodb+srv://jimin:1111@cluster0-tdr02.mongodb.net/test?retryWrites=true&w=majority';
 
@@ -17,6 +19,9 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+
+// route
+app.use('/user', userRouter);
 
 const port = 5000;
 
