@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 const userModel = require('../model/user');
+const jwt = require('jsonwebtoken');
 
 //api마다 설명
 //@route POST http://localhost:5000/user/signup
@@ -51,9 +53,49 @@ router.post('/signup', (req,res) => {
 //@access Public
 
 router.post('/login', (req, res) => {
-   res.json({
-      msg: 'user login'
-   });
+   const {email, password} = req.body;
+
+   //email유무체크, password 매칭, 화면리턴 - jwt
+   userModel
+       .findOne({email})
+       .exec()
+       .then(user => {
+           if(!user){
+               return res.json({
+                  msg: "email doesnt exist"
+               });
+           }
+           // user 존재.
+           console.log(user);
+           bcrypt.compare(password, user.password, (err, result) => {
+               console.log(result);
+               if(err){
+                   return res.json({
+                       msg: "password is not matched"
+                   });
+               }else{
+                   const payload = { id: user._id, name: user.username, avatar: user.avatar };
+
+                   jwt.sign(
+                       payload,
+                       "secret",
+                       { expiresIn: 36000 },
+                       (err, token) => {
+                           res.json({
+                              success: true,
+                              tokenInfo: "Bearer " + token
+                           });
+                       }
+                   );
+               }
+           })
+       })
+       .catch(err => {
+          res.json({
+             error: err
+          });
+       });
+
 });
 
 
