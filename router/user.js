@@ -108,6 +108,12 @@ router.post('/login', (req, res) => {
 
 });
 
+//@route GET http://localhost:5000/user/google
+//@desc Google signup
+//@Access Public
+router.get('/google', passport.authenticate('googleToken', {session: false}),(req,res) => {
+
+});
 
 
 //현재접속 유저 정보
