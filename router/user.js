@@ -112,6 +112,22 @@ router.post('/login', (req, res) => {
 //@desc Google signup and login
 //@Access Public
 router.get('/google', passport.authenticate('googleToken', {session: false}),(req,res) => {
+    console.log(req.user);
+
+    //토큰에 담길 유저정보는 로컬, 소셜로그인 전부 통일.
+    const payload = {id: req.user._id, name: req.user.google.name, avatar: req.user.google.avatar  }
+
+    jwt.sign(
+        payload, //payload바탕으로 생성.
+        process.env.SECRET,
+        {expiresIn: 36000},
+        (err, token) => {
+            res.json({
+                success: true,
+                token: "Bearer " + token
+            });
+        }
+    )
 
 });
 
@@ -119,6 +135,7 @@ router.get('/google', passport.authenticate('googleToken', {session: false}),(re
 //@desc Facebook signup and login
 //@Access Public
 router.get('/facebook', passport.authenticate('facebookToken', {session: false}),(req,res) => {
+    //db에 들어가는 user 내용.
     console.log(req.user)
 
     const payload = { id: req.user._id, name: req.user.facebook.name, avatar: req.user.facebook.avatar };

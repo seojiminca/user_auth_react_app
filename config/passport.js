@@ -32,9 +32,34 @@ passport.use('googleToken', new GooglePlusTokenStrategy({
     clientID: process.env.GOOGLE_CLIENTID,
     clientSecret: process.env.GOOGLE_CLIENTSECRET
 }, async (accessToken, refreshToken, profile, cb) => {
-    console.log("accessToken", accessToken)
-    console.log("refreshToken", refreshToken)
-    console.log("profile", profile)
+    // console.log("accessToken", accessToken)
+    // console.log("refreshToken", refreshToken)
+     console.log("profile", profile)
+
+    try{
+        //google사용자 확인
+        const existingUser = await userModel.findOne({"google.id": profile.id});
+
+        if(existingUser){
+            return cb(null, existingUser);
+        }
+
+        const newUser = new userModel({
+            method: 'google',
+            google: {
+                id: profile.id,
+                name: profile.name.givenName,
+                email: profile.emails[0].value,
+                avatar: profile.photos[0].value
+            }
+        });
+
+        await newUser.save();
+        cb(null, newUser);
+
+    }catch(err){
+        cb(err, false, err.message);
+    }
 }));
 
 passport.use('facebookToken', new FacebookTokenStrategy({
