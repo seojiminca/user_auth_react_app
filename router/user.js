@@ -121,6 +121,21 @@ router.get('/google', passport.authenticate('googleToken', {session: false}),(re
 router.get('/facebook', passport.authenticate('facebookToken', {session: false}),(req,res) => {
     console.log(req.user)
 
+    const payload = { id: req.user._id, name: req.user.facebook.name, avatar: req.user.facebook.avatar };
+
+    //위 정보 바탕으로 리턴토큰생성
+    jwt.sign(
+        payload,
+        process.env.SECRET,
+        {expiresIn: 36000},
+        (err, token) => {
+            res.json({
+                success: true,
+                token: "Bearer " + token
+            });
+        }
+    )
+
 });
 
 //현재접속 유저 정보
