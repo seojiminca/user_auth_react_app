@@ -109,12 +109,19 @@ router.post('/login', (req, res) => {
 });
 
 //@route GET http://localhost:5000/user/google
-//@desc Google signup
+//@desc Google signup and login
 //@Access Public
 router.get('/google', passport.authenticate('googleToken', {session: false}),(req,res) => {
 
 });
 
+//@route GET http://localhost:5000/user/facebook
+//@desc Facebook signup and login
+//@Access Public
+router.get('/facebook', passport.authenticate('facebookToken', {session: false}),(req,res) => {
+    console.log(req.user)
+
+});
 
 //현재접속 유저 정보
 //@route GET http://localhost:5000/user/current

@@ -37,4 +37,38 @@ passport.use('googleToken', new GooglePlusTokenStrategy({
     console.log("profile", profile)
 }));
 
+passport.use('facebookToken', new FacebookTokenStrategy({
+    clientID: process.env.FACEBOOK_CLIENTID,
+    clientSecret: process.env.FACEBOOK_CLIENTSECRET
+}, async (accessToken, refreshToken, profile, cb) => {
+    // console.log("accessToken", accessToken)
+    // console.log("refreshToken", refreshToken)
+    // console.log("profile", profile)
+    try{
+
+        const existingUser = await userModel.findOne({"facebook.id": profile.id});
+
+        //facebook으로 가입한 유저가 있으면.
+        if(existingUser){
+            return cb(null, existingUser);
+        }
+        const newUser = new userModel({
+            method: 'facebook',
+            facebook: {
+                //log를 찍어서 나온 결과(profile)를 바탕으로 생성.
+                id: profile.id,
+                name: profile.name.givenName,
+                email: profile.emails[0].value, //배열로 나오니까 []
+                avatar: profile.photos[0].value
+            }
+        });
+
+        await newUser.save();
+        cb(null, newUser);
+
+    }catch(err){
+        cb(err, false, err.message);
+    }
+}));
+
 
