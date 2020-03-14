@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 dotenv.config();
 const app = express();
+const passport = require('passport');
 
 const userRouter = require("./router/user");
 
@@ -18,7 +19,9 @@ mongoose.connect(process.env.MONGOURL, {useNewUrlParser: true, useUnifiedTopolog
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(passport.initialize());
 
+require('./config/passport')(passport);
 
 // route
 app.use('/user', userRouter);
