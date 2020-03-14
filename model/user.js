@@ -12,20 +12,17 @@ const userSchema = new mongoose.Schema(
 
         local: {
             name: {
-                type: String,
-                required: true
+                type: String
             },
             email: {
                 type: String,
                 lowercase: true,
-                required: true
             },
             avatar: {
                 type: String //이미지여도 String. front영역
             },
             password: {
                 type: String,
-                required: true
             }
         },
         //없는 경우를 대비해서 required 사용안한다.
@@ -75,19 +72,19 @@ userSchema.pre("save", async function (next) { //async, await 같이 사용.
            next();
        }
 
-       const avatar = await gravatar.url(this.email, { //아바타를 username 기반으로 생성
+       const avatar = await gravatar.url(this.local.email, { //아바타를 username 기반으로 생성
            s: '200',
            r: 'pg',
            d: 'mm'
        });
 
-       this.avatar = avatar;
+       this.local.avatar = avatar;
 
        //password암호화.
        const salt = await bcrypt.genSalt(10);
-       const passwordHash = await bcrypt.hash(this.password, salt);
+       const passwordHash = await bcrypt.hash(this.local.password, salt);
 
-       this.password = passwordHash;
+       this.local.password = passwordHash;
        console.log('exited');
        next(); // 그 다음 동작을 위해
 

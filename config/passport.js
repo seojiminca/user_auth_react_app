@@ -1,8 +1,9 @@
 //passport를 이용해서 json web token인증해주는 함수
 
 const {Strategy,ExtractJwt} = require('passport-jwt'); //JWT를 생성하고 푸는 두개의 함수.
+const GooglePlusTokenStrategy = require('passport-google-plus-token');
+const FacebookTokenStrategy = require('passport-facebook-token');
 const userModel = require('../model/user');
-
 
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
@@ -25,3 +26,5 @@ module.exports = passport => {
         })
     )
 }
+
+

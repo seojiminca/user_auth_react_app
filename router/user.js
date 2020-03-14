@@ -18,7 +18,7 @@ router.post('/signup', (req,res) => {
     const {username, email, password } = req.body; //avatar, id 자동생성.
 
     userModel
-        .findOne({email})
+        .findOne({"local.email": email})
         .exec()
         .then(user => {
             if(user){
@@ -28,7 +28,12 @@ router.post('/signup', (req,res) => {
             }
             //else 삭제
             const newUser = new userModel({
-               username, email, password
+                method: 'local',
+                local: {
+                    username: username,
+                    email: email,
+                    password: password
+                }
             });
 
             newUser
