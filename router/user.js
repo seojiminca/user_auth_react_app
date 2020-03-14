@@ -3,6 +3,11 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const userModel = require('../model/user');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
+
+//config/passport 함수를 사용해서 JWT을 검증한다.
+const checkAuth = passport.authenticate('jwt', {session: false});
+
 
 //api마다 설명
 //@route POST http://localhost:5000/user/signup
@@ -105,9 +110,9 @@ router.post('/login', (req, res) => {
 //@desc current user info
 //@Access Private
 
-router.get('/current', (req, res) => {
+router.get('/current', checkAuth, (req, res) => {
    res.json({
-      msg: 'current user'
+      userInfo: req.user
    });
 });
 
