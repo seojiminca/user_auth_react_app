@@ -112,7 +112,9 @@ router.post('/login', (req, res) => {
 
 router.get('/current', checkAuth, (req, res) => {
    res.json({
-      userInfo: req.user
+        id: req.user._id,
+       username: req.user.username,
+       email: req.user.email
    });
 });
 

@@ -4,20 +4,60 @@ const gravatar = require('gravatar');
 
 const userSchema = new mongoose.Schema(
     {
-        username: {
+        method: {
             type: String,
+            enum: ['local', 'google', 'facebook'],
             required: true
         },
-        email: {
-            type: String,
-            required: true
+
+        local: {
+            name: {
+                type: String,
+                required: true
+            },
+            email: {
+                type: String,
+                lowercase: true,
+                required: true
+            },
+            avatar: {
+                type: String //이미지여도 String. front영역
+            },
+            password: {
+                type: String,
+                required: true
+            }
         },
-        avatar: {
-            type: String //이미지여도 String. front영역
+        //없는 경우를 대비해서 required 사용안한다.
+        google: {
+            id: {
+                type: String
+            },
+            name: {
+                type: String
+            },
+            email: {
+                type: String,
+                lowercase: true
+            },
+            avatar: {
+                type: String
+            }
         },
-        password: {
-            type: String,
-            required: true
+        facebook:{
+            id: {
+                type: String
+            },
+            name: {
+                type: String
+            },
+            email: {
+                type: String,
+                lowercase: true
+            },
+            avatar: {
+                type: String
+            }
         }
     },
     {
@@ -29,6 +69,12 @@ userSchema.pre("save", async function (next) { //async, await 같이 사용.
    try{
        // avatar이미지 생성,
        console.log('entered');
+
+       //소셜로그인은 아바타나 비번 암호화에서 제외시킨다.
+       if(this.method !== 'local'){
+           next();
+       }
+
        const avatar = await gravatar.url(this.email, { //아바타를 username 기반으로 생성
            s: '200',
            r: 'pg',
