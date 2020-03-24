@@ -8,6 +8,7 @@ const app = express();
 const passport = require('passport');
 
 const userRouter = require("./router/user");
+const profileRouter = require("./router/profile");
 
 require("./database.js");
 
@@ -21,6 +22,7 @@ require('./config/passport')(passport);
 
 // route
 app.use('/user', userRouter);
+app.use('/profile', profileRouter);
 
 const port = process.env.PORT;
 
