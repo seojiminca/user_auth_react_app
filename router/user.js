@@ -13,7 +13,7 @@ const checkAuth = passport.authenticate('jwt', {session: false});
 //@desc signup user route
 //@access Public - 이 api로 누구나 접근가능
 router.post('/signup', (req,res) => {
-    const {username, email, password } = req.body; //avatar, id 자동생성.
+    const {name, email, password } = req.body; //avatar, id 자동생성.
 
     userModel
         .findOne({"local.email": email})
@@ -28,7 +28,7 @@ router.post('/signup', (req,res) => {
             const newUser = new userModel({
                 method: 'local',
                 local: {
-                    username: username,
+                    name: name,
                     email: email,
                     password: password
                 }
@@ -81,7 +81,9 @@ router.post('/login', (req, res) => {
                        msg: "password is not matched"
                    });
                }else{
-                   const payload = { id: user._id, name: user.username, avatar: user.avatar };
+
+                   // JWT생성
+                  const payload = { id: user._id, name: user.name, avatar: user.avatar };
 
                    jwt.sign(
                        payload,
