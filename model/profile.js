@@ -21,7 +21,7 @@ const profileSchema = new mongoose.Schema(
         age: {
             type: Number
         },
-        introduce:{
+        introduction:{
             type: String
         }
     },

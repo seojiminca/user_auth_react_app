@@ -64,7 +64,7 @@ router.post('/login', (req, res) => {
 
    //email유무체크, password 매칭, 화면리턴 - jwt
    userModel
-       .findOne({email})
+       .findOne({"local.email": email})
        .exec()
        .then(user => {
            if(!user){
@@ -74,7 +74,7 @@ router.post('/login', (req, res) => {
            }
            // user 존재.
            console.log(user);
-           bcrypt.compare(password, user.password, (err, result) => {
+           bcrypt.compare(password, user.local.password, (err, result) => {
                console.log(result);
                if(err){
                    return res.json({
