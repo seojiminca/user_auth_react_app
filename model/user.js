@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema(
     {
         method: {
             type: String,
-            enum: ['local', 'google', 'facebook'],
+            enum: ['local', 'google', 'facebook', 'naver', 'kakao'],
             required: true
         },
 
@@ -55,6 +55,36 @@ const userSchema = new mongoose.Schema(
             avatar: {
                 type: String
             }
+        },
+        naver:{
+            id: {
+                type: String
+            },
+            name: {
+                type: String
+            },
+            email: {
+                type: String,
+                lowercase: true
+            },
+            avatar: {
+                type: String
+            }
+        },
+        kakao:{
+            id: {
+                type: String
+            },
+            name: {
+                type: String
+            },
+            email: {
+                type: String,
+                lowercase: true
+            },
+            avatar: {
+                type: String
+            }
         }
     },
     {
@@ -64,7 +94,7 @@ const userSchema = new mongoose.Schema(
         //pre: save를 하기 전 실행되는 함수
 userSchema.pre("save", async function (next) { //async, await 같이 사용.
    try{
-       // avatar이미지 생성,
+       // avatar이미지 생성
        console.log('entered');
 
        //소셜로그인은 아바타나 비번 암호화에서 제외시킨다.

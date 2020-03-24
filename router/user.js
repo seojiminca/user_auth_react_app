@@ -9,11 +9,9 @@ const passport = require('passport');
 const checkAuth = passport.authenticate('jwt', {session: false});
 
 
-//api마다 설명
 //@route POST http://localhost:5000/user/signup
 //@desc signup user route
-//@access Public - 이 api로 누구나 접근가
-
+//@access Public - 이 api로 누구나 접근가능
 router.post('/signup', (req,res) => {
     const {username, email, password } = req.body; //avatar, id 자동생성.
 
@@ -61,7 +59,6 @@ router.post('/signup', (req,res) => {
 //@route POST http://localhost:5000/user/login
 //@desc login user route
 //@access Public
-
 router.post('/login', (req, res) => {
    const {email, password} = req.body;
 
@@ -155,11 +152,56 @@ router.get('/facebook', passport.authenticate('facebookToken', {session: false})
 
 });
 
+//@route GET http://localhost:5000/user/naver
+//@desc NAVER signup and login
+//@Access Public
+router.get('/naver', passport.authenticate('naverToken', {session: false}),(req,res) => {
+    //db에 들어가는 user 내용.
+    console.log(req.user)
+
+    const payload = { id: req.user._id, name: req.user.naver.name, avatar: req.user.naver.avatar };
+
+    //위 정보 바탕으로 리턴토큰생성
+    jwt.sign(
+        payload,
+        process.env.SECRET,
+        {expiresIn: 36000},
+        (err, token) => {
+            res.json({
+                success: true,
+                token: "Bearer " + token
+            });
+        }
+    )
+});
+
+//@route GET http://localhost:5000/user/kakao
+//@desc Kakao signup and login
+//@Access Public
+router.get('/kakao', passport.authenticate('kakaoToken', {session: false}),(req,res) => {
+    //db에 들어가는 user 내용.
+    console.log(req.user)
+
+    const payload = { id: req.user._id, name: req.user.kakao.name, avatar: req.user.kakao.avatar };
+
+    //위 정보 바탕으로 리턴토큰생성
+    jwt.sign(
+        payload,
+        process.env.SECRET,
+        {expiresIn: 36000},
+        (err, token) => {
+            res.json({
+                success: true,
+                token: "Bearer " + token
+            });
+        }
+    )
+});
+
 //현재접속 유저 정보
 //@route GET http://localhost:5000/user/current
 //@desc current user info
 //@Access Private
-
 router.get('/current', checkAuth, (req, res) => {
    res.json({
         id: req.user._id,
