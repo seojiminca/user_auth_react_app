@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs');
 const userModel = require('../model/user');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
@@ -74,30 +73,49 @@ router.post('/login', (req, res) => {
            }
            // user 존재.
            console.log(user);
-           bcrypt.compare(password, user.local.password, (err, result) => {
-               console.log(result);
-               if(err){
-                   return res.json({
-                       msg: "password is not matched"
-                   });
-               }else{
 
-                   // JWT생성
-                  const payload = { id: user._id, name: user.name, avatar: user.avatar };
+           user.comparePassword(password, (err, isMatch) => {
+               if(err) throw err;
 
-                   jwt.sign(
-                       payload,
-                       process.env.SECRET,
-                       { expiresIn: 36000 },
-                       (err, token) => {
-                           res.json({
-                              success: true,
-                              tokenInfo: "Bearer " + token
-                           });
-                       }
-                   );
-               }
+               // JWT생성
+              const payload = { id: user._id, name: user.name, avatar: user.avatar };
+
+               jwt.sign(
+                   payload,
+                   process.env.SECRET,
+                   { expiresIn: 36000 },
+                   (err, token) => {
+                       res.json({
+                          success: true,
+                          tokenInfo: "Bearer " + token
+                       });
+                   }
+               );
            })
+           // bcrypt.compare(password, user.local.password, (err, result) => {
+           //     console.log(result);
+           //     if(err){
+           //         return res.json({
+           //             msg: "password is not matched"
+           //         });
+           //     }else{
+           //
+           //         // JWT생성
+           //        const payload = { id: user._id, name: user.name, avatar: user.avatar };
+           //
+           //         jwt.sign(
+           //             payload,
+           //             process.env.SECRET,
+           //             { expiresIn: 36000 },
+           //             (err, token) => {
+           //                 res.json({
+           //                    success: true,
+           //                    tokenInfo: "Bearer " + token
+           //                 });
+           //             }
+           //         );
+           //     }
+           // })
        })
        .catch(err => {
           res.json({

@@ -21,7 +21,16 @@ const profileSchema = new mongoose.Schema(
         age: {
             type: Number
         },
+        location: {
+            type: String
+        },
+        travelStyle: {
+            type: String
+        },
         introduction:{
+            type: String
+        },
+        travelHistory:{
             type: String
         }
     },

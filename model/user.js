@@ -124,6 +124,12 @@ userSchema.pre("save", async function (next) { //async, await 같이 사용.
    }
 });
 
+userSchema.methods.comparePassword = function(candidatePassword, cb) {
+    bcrypt.compare(candidatePassword, this.local.password, function (err, isMatch) {
+        if(err) return cb(err);
+        cb(null, isMatch);
+    })
+}
 
 
 
