@@ -7,6 +7,15 @@ const passport = require('passport');
 //config/passport 함수를 사용해서 JWT을 검증한다.
 const checkAuth = passport.authenticate('jwt', {session: false});
 
+function tokenGenerator(payload){ //token에 담길 내용만 보내기.
+    const token = jwt.sign(
+        payload,
+        process.env.SECRET,
+        {expiresIn: 36000});
+
+    return "Bearer " + token
+};
+
 
 //@route POST http://localhost:5000/user/signup
 //@desc signup user route
@@ -74,23 +83,29 @@ router.post('/login', (req, res) => {
            // user 존재.
            console.log(user);
 
-           user.comparePassword(password, (err, isMatch) => {
+           user.comparePassword(password, (err, isMatch) => { //isMatch 는 true/false 라서 따로 true명시 안해도됨.
+               //console.log("isMatch is ",isMatch)
                if(err) throw err;
 
                // JWT생성
-              const payload = { id: user._id, name: user.name, avatar: user.avatar };
+              const payload = { id: user._id, name: user.local.name, avatar: user.local.avatar };
 
-               jwt.sign(
-                   payload,
-                   process.env.SECRET,
-                   { expiresIn: 36000 },
-                   (err, token) => {
-                       res.json({
-                          success: true,
-                          tokenInfo: "Bearer " + token
-                       });
-                   }
-               );
+              res.status(200).json({
+                  success: isMatch,
+                  token: tokenGenerator(payload)
+              });
+
+               // jwt.sign(
+               //     payload,
+               //     process.env.SECRET,
+               //     { expiresIn: 36000 },
+               //     (err, token) => {
+               //         res.json({
+               //            success: true,
+               //            tokenInfo: "Bearer " + token
+               //         });
+               //     }
+               // );
            })
            // bcrypt.compare(password, user.local.password, (err, result) => {
            //     console.log(result);
@@ -134,17 +149,22 @@ router.get('/google', passport.authenticate('googleToken', {session: false}),(re
     //토큰에 담길 유저정보는 로컬, 소셜로그인 전부 통일.
     const payload = {id: req.user._id, name: req.user.google.name, avatar: req.user.google.avatar  }
 
-    jwt.sign(
-        payload, //payload바탕으로 생성.
-        process.env.SECRET,
-        {expiresIn: 36000},
-        (err, token) => {
-            res.json({
-                success: true,
-                token: "Bearer " + token
-            });
-        }
-    )
+    res.status(200).json({
+       success: true,
+       token: tokenGenerator(payload)
+    });
+
+    // jwt.sign(
+    //     payload, //payload바탕으로 생성.
+    //     process.env.SECRET,
+    //     {expiresIn: 36000},
+    //     (err, token) => {
+    //         res.json({
+    //             success: true,
+    //             token: "Bearer " + token
+    //         });
+    //     }
+    // )
 
 });
 
@@ -158,17 +178,23 @@ router.get('/facebook', passport.authenticate('facebookToken', {session: false})
     const payload = { id: req.user._id, name: req.user.facebook.name, avatar: req.user.facebook.avatar };
 
     //위 정보 바탕으로 리턴토큰생성
-    jwt.sign(
-        payload,
-        process.env.SECRET,
-        {expiresIn: 36000},
-        (err, token) => {
-            res.json({
-                success: true,
-                token: "Bearer " + token
-            });
-        }
-    )
+
+    res.status(200).json({
+       success:  true,
+        token: tokenGenerator(payload)
+    });
+
+    // jwt.sign(
+    //     payload,
+    //     process.env.SECRET,
+    //     {expiresIn: 36000},
+    //     (err, token) => {
+    //         res.json({
+    //             success: true,
+    //             token: "Bearer " + token
+    //         });
+    //     }
+   // )
 
 });
 
@@ -182,17 +208,22 @@ router.get('/naver', passport.authenticate('naverToken', {session: false}),(req,
     const payload = { id: req.user._id, name: req.user.naver.name, avatar: req.user.naver.avatar };
 
     //위 정보 바탕으로 리턴토큰생성
-    jwt.sign(
-        payload,
-        process.env.SECRET,
-        {expiresIn: 36000},
-        (err, token) => {
-            res.json({
-                success: true,
-                token: "Bearer " + token
-            });
-        }
-    )
+    res.status(200).json({
+       success: true,
+       token: tokenGenerator(payload)
+    });
+
+    // jwt.sign(
+    //     payload,
+    //     process.env.SECRET,
+    //     {expiresIn: 36000},
+    //     (err, token) => {
+    //         res.json({
+    //             success: true,
+    //             token: "Bearer " + token
+    //         });
+    //     }
+    // )
 });
 
 //@route GET http://localhost:5000/user/kakao
@@ -205,17 +236,22 @@ router.get('/kakao', passport.authenticate('kakaoToken', {session: false}),(req,
     const payload = { id: req.user._id, name: req.user.kakao.name, avatar: req.user.kakao.avatar };
 
     //위 정보 바탕으로 리턴토큰생성
-    jwt.sign(
-        payload,
-        process.env.SECRET,
-        {expiresIn: 36000},
-        (err, token) => {
-            res.json({
-                success: true,
-                token: "Bearer " + token
-            });
-        }
-    )
+    res.status(200).json({
+       success: true,
+       token: tokenGenerator(payload)
+    });
+
+    // jwt.sign(
+    //     payload,
+    //     process.env.SECRET,
+    //     {expiresIn: 36000},
+    //     (err, token) => {
+    //         res.json({
+    //             success: true,
+    //             token: "Bearer " + token
+    //         });
+    //     }
+    //)
 });
 
 //현재접속 유저 정보
