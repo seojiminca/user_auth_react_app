@@ -9,6 +9,7 @@ const passport = require('passport');
 
 const userRouter = require("./router/user");
 const profileRouter = require("./router/profile");
+const adminRouter = require("./router/admin");
 
 require("./database.js");
 
@@ -23,6 +24,7 @@ require('./config/passport')(passport);
 // route
 app.use('/user', userRouter);
 app.use('/profile', profileRouter);
+app.use('/admin', adminRouter);
 
 const port = process.env.PORT;
 
