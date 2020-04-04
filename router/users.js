@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const userModel = require('../model/user');
+const userModel = require('../model/users');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
@@ -17,7 +17,7 @@ function tokenGenerator(payload){ //token에 담길 내용만 보내기.
 };
 
 
-//@route POST http://localhost:5000/user/signup
+//@route POST http://localhost:5000/users/signup
 //@desc signup user route
 //@access Public - 이 api로 누구나 접근가능
 router.post('/signup', (req,res) => {
@@ -64,7 +64,7 @@ router.post('/signup', (req,res) => {
         });
 });
 
-//@route POST http://localhost:5000/user/login
+//@route POST http://localhost:5000/users/login
 //@desc login user route
 //@access Public
 router.post('/login', (req, res) => {
@@ -140,7 +140,7 @@ router.post('/login', (req, res) => {
 
 });
 
-//@route GET http://localhost:5000/user/google
+//@route GET http://localhost:5000/users/google
 //@desc Google signup and login
 //@Access Public
 router.get('/google', passport.authenticate('googleToken', {session: false}),(req,res) => {
@@ -168,7 +168,7 @@ router.get('/google', passport.authenticate('googleToken', {session: false}),(re
 
 });
 
-//@route GET http://localhost:5000/user/facebook
+//@route GET http://localhost:5000/users/facebook
 //@desc Facebook signup and login
 //@Access Public
 router.get('/facebook', passport.authenticate('facebookToken', {session: false}),(req,res) => {
@@ -198,7 +198,7 @@ router.get('/facebook', passport.authenticate('facebookToken', {session: false})
 
 });
 
-//@route GET http://localhost:5000/user/naver
+//@route GET http://localhost:5000/users/naver
 //@desc NAVER signup and login
 //@Access Public
 router.get('/naver', passport.authenticate('naverToken', {session: false}),(req,res) => {
@@ -226,7 +226,7 @@ router.get('/naver', passport.authenticate('naverToken', {session: false}),(req,
     // )
 });
 
-//@route GET http://localhost:5000/user/kakao
+//@route GET http://localhost:5000/users/kakao
 //@desc Kakao signup and login
 //@Access Public
 router.get('/kakao', passport.authenticate('kakaoToken', {session: false}),(req,res) => {
@@ -254,8 +254,20 @@ router.get('/kakao', passport.authenticate('kakaoToken', {session: false}),(req,
     //)
 });
 
+//@route DELETE http://localhost:5000/users
+//@desc delete user
+//@Access Private
+router.delete('/', checkAuth, (req, res) => {
+    userModel
+        .findOneAndDelete({user: req.user.id})
+        .then(() => {
+            res.json({success: true})
+        });
+});
+
+
 //현재접속 유저 정보
-//@route GET http://localhost:5000/user/current
+//@route GET http://localhost:5000/users/current
 //@desc current user info
 //@Access Private
 router.get('/current', checkAuth, (req, res) => {

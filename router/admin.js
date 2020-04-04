@@ -1,14 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const userModel = require('../model/user');
+const userModel = require('../model/users');
 const passport = require('passport');
 
 const checkAuth = passport.authenticate('jwt', {session: false});
 
-//@route GET http://localhost:5000/admin/user
+
+
+//@route GET http://localhost:5000/admin/users
 //@desc get all users
 //@access Private - admin만 접근가능
-router.get('/user', checkAuth, (req, res) => {
+router.get('/users', checkAuth, (req, res) => {
    userModel
        .findById(req.user.id)
        .exec()

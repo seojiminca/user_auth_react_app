@@ -1,15 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const profileModel = require('../model/profile');
-const userModel = require('../model/user');
-const jwt = require('jsonwebtoken');
+const profileModel = require('../model/profiles');
 const passport = require('passport');
 
 const checkAuth = passport.authenticate('jwt', {session: false});
 
 // profile CRUD
 
-//@route POST http://localhost:5000/profile
+//@route POST http://localhost:5000/profiles
 //@desc add user profile
 //@Access Private
 router.post('/', checkAuth, (req, res) => {
@@ -60,7 +58,7 @@ router.post('/', checkAuth, (req, res) => {
         });
 });
 
-//@route GET http://localhost:5000/profile
+//@route GET http://localhost:5000/profiles
 //@desc read user profile
 //@Access Private
 router.get('/', checkAuth, (req, res) => {
@@ -82,7 +80,7 @@ router.get('/', checkAuth, (req, res) => {
 
 });
 
-//@route PATCH http://localhost:5000/profile
+//@route PATCH http://localhost:5000/profiles
 //@desc update user profile
 //@Access Private
 router.patch('/', checkAuth, (req, res) => {
@@ -127,19 +125,6 @@ router.patch('/', checkAuth, (req, res) => {
             });
 });
 
-//@route DELETE http://localhost:5000/profile
-//@desc delete user profile
-//@Access Private
-router.delete('/', checkAuth, (req, res) => {
-    profileModel
-        .findOneAndRemove({user: req.user.id})
-        .then(() => {
-            userModel
-                .findOneAndRemove({_id: req.user.id})
-                .then(() => {
-                    res.json({success: true})
-                });
-        });
-});
+
 
 module.exports = router;

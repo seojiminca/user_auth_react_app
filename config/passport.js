@@ -3,7 +3,7 @@ const GooglePlusTokenStrategy = require('passport-google-plus-token');
 const FacebookTokenStrategy = require('passport-facebook-token');
 const NaverTokenStrategy = require('passport-naver-token');
 const KakaoTokenStrategy = require('passport-kakao-token');
-const userModel = require('../model/user');
+const userModel = require('../model/users');
 
 //passport를 이용해서 json web token 인증해주는 함수
 const opts = {};

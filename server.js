@@ -7,9 +7,10 @@ dotenv.config();
 const app = express();
 const passport = require('passport');
 
-const userRouter = require("./router/user");
-const profileRouter = require("./router/profile");
+const userRouter = require("./router/users");
+const profileRouter = require("./router/profiles");
 const adminRouter = require("./router/admin");
+const postRouter = require("./router/posts");
 
 require("./database.js");
 
@@ -18,13 +19,15 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(passport.initialize());
+app.use('/uploads/', express.static('uploads'));
 
 require('./config/passport')(passport);
 
 // route
-app.use('/user', userRouter);
-app.use('/profile', profileRouter);
+app.use('/users', userRouter);
+app.use('/profiles', profileRouter);
 app.use('/admin', adminRouter);
+app.use('/posts', postRouter);
 
 const port = process.env.PORT;
 
