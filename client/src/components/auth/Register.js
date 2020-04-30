@@ -71,6 +71,10 @@ class Register extends Component {
                                         value={email} //사용자입력값
                                         onChange={this.onChange}
                                     />
+                                    <small className="form-text text-muted">
+                                        This site uses Gravatar so if you want a profile image, use
+                                        a Gravatar email
+                                    </small>
                                 </div>
                                 <div className="form-group">
                                     <input
