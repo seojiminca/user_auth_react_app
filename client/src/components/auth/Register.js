@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import axios from 'axios';
 
 class Register extends Component {
 
@@ -34,7 +35,13 @@ class Register extends Component {
             password: this.state.password,
             password2: this.state.password2
         };
-        console.log(newUser); //회원가입하고 개발자옵션에서 로그확인.
+        //console.log(newUser); //회원가입하고 개발자옵션에서 로그확인.
+
+        //axios 이용해서 api보낸다.
+        axios
+            .post('users/signup', newUser)
+            .then(res => console.log(res.data))
+            .catch(err => this.setState({error: err.response.data}))
     }
 
     render() {

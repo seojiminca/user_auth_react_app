@@ -23,6 +23,8 @@ function tokenGenerator(payload){ //token에 담길 내용만 보내기.
 router.post('/signup', (req,res) => {
     const {name, email, password } = req.body; //avatar, id 자동생성.
 
+    console.log(req.body);
+
     userModel
         .findOne({"local.email": email})
         .exec()
