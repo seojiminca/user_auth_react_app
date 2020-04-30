@@ -16,7 +16,7 @@ class Navbar extends Component {
                         data-target="#mobile-nav"
                     >
                         {/*리액트에서는 className. html에서는 class*/}
-                        <span className="nav-bar-toggler-icon"/>
+                        <span className="nav-bar-toggler-icon" />
                     </button>
                 </div>
 
