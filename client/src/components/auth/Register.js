@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import TextFieldGroup from "../common/TextFieldGroup";
 
 class Register extends Component {
 
@@ -59,50 +60,40 @@ class Register extends Component {
                             </p>
 
                             <form onSubmit={this.onSubmit}>
-                                <div className="form-group">
-                                    <input
-                                        type="text"
-                                        className="form-control form-control-lg"
-                                        placeholder="Name"
-                                        name="name"
-                                        value={name} //사용자입력값
-                                        onChange={this.onChange}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <input
-                                        type="email"
-                                        className="form-control form-control-lg"
-                                        placeholder="Email"
-                                        name="email"
-                                        value={email} //사용자입력값
-                                        onChange={this.onChange}
-                                    />
-                                    <small className="form-text text-muted">
-                                        This site uses Gravatar so if you want a profile image, use
-                                        a Gravatar email
-                                    </small>
-                                </div>
-                                <div className="form-group">
-                                    <input
-                                        type="password"
-                                        className="form-control form-control-lg"
-                                        placeholder="Password"
-                                        name="password"
-                                        value={password} //사용자입력값
-                                        onChange={this.onChange}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <input
-                                        type="password"
-                                        className="form-control form-control-lg"
-                                        placeholder="Confirm password"
-                                        name="password2"
-                                        value={password2} //사용자입력값
-                                        onChange={this.onChange}
-                                    />
-                                </div>
+                                <TextFieldGroup
+                                    type="name"
+                                    placeholder=""
+                                    onChange={this.onChange}
+                                    value={name}
+                                    name="name"
+                                />
+                                <TextFieldGroup
+                                    type="email"
+                                    placeholder="email"
+                                    onChange={this.onChange}
+                                    value={email}
+                                    name="email"
+                                    info="This site uses Gravatar so if you want a profile image, use a Gravatar email"
+                                />
+                                {/*<small className="form-text text-muted">*/}
+                                {/*    This site uses Gravatar so if you want a profile image, use*/}
+                                {/*    a Gravatar email*/}
+                                {/*</small>*/}
+
+                                <TextFieldGroup
+                                    type="password"
+                                    placeholder="password"
+                                    onChange={this.onChange}
+                                    value={password}
+                                    name="password"
+                                />
+                                <TextFieldGroup
+                                    type="password"
+                                    placeholder="password"
+                                    onChange={this.onChange}
+                                    value={password2}
+                                    name="password"
+                                />
                                 <input type="submit" className="btn btn-info btn-block mt-4" />
                             </form>
                         </div>

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import TextFieldGroup from "../common/TextFieldGroup";
 
 class Login extends Component {
 
@@ -50,26 +51,30 @@ class Login extends Component {
 
                             <form onSubmit={this.onSubmit}>
 
-                                <div className="form-group">
-                                    <input
-                                        type="email"
-                                        className="form-control form-control-lg"
-                                        placeholder="Email"
-                                        name="email"
-                                        value={email} //사용자입력값
-                                        onChange={this.onChange}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <input
-                                        type="password"
-                                        className="form-control form-control-lg"
-                                        placeholder="Password"
-                                        name="password"
-                                        value={password} //사용자입력값
-                                        onChange={this.onChange}
-                                    />
-                                </div>
+                                {/*<div className="form-group">*/}
+                                {/*    <input*/}
+                                {/*        type="email"*/}
+                                {/*        className="form-control form-control-lg"*/}
+                                {/*        placeholder="Email"*/}
+                                {/*        name="email"*/}
+                                {/*        value={email} //사용자입력값*/}
+                                {/*        onChange={this.onChange}*/}
+                                {/*    />*/}
+                                {/*</div>*/}
+                                <TextFieldGroup
+                                    type="email"
+                                    placeholder="Email Address"
+                                    onChange={this.onChange}
+                                    value={email}
+                                    name="email"
+                                />
+                                <TextFieldGroup
+                                    type="password"
+                                    placeholder="password"
+                                    onChange={this.onChange}
+                                    value={password}
+                                    name="password"
+                                />
 
                                 <input type="submit" className="btn btn-info btn-block mt-4" />
                             </form>
