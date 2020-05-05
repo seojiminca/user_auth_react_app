@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import TextFieldGroup from "../common/TextFieldGroup";
+import {connect} from 'react-redux';
+import {registerUser} from "../../actions/authActions";
 
 class Register extends Component {
 
@@ -36,21 +39,26 @@ class Register extends Component {
             password: this.state.password,
             password2: this.state.password2
         };
+        this.props.registerUser(newUser);
         //console.log(newUser); //회원가입하고 개발자옵션에서 로그확인.
 
         //axios 이용해서 api보낸다.
-        axios
-            .post('users/signup', newUser)
-            .then(res => console.log(res.data))
-            .catch(err => this.setState({errors: err.response.data}))
+        // axios
+        //     .post('users/signup', newUser)
+        //     .then(res => console.log(res.data))
+        //     .catch(err => this.setState({errors: err.response.data}))
+
+
     }
 
     render() {
 
         const {name, email, password, password2, errors} = this.state;
+        const {user} = this.props.auth;
 
         return (
             <div className="register">
+                {user ? user.name : null}
                 <div className="container">
                     <div className="row">
                         <div className="col-md-8 m-auto">
@@ -95,7 +103,7 @@ class Register extends Component {
                                     placeholder="Password"
                                     onChange={this.onChange}
                                     value={password2}
-                                    name="password"
+                                    name="password2"
                                     error={errors.password2}
                                 />
                                 <input type="submit" className="btn btn-info btn-block mt-4" />
@@ -109,4 +117,13 @@ class Register extends Component {
     }
 }
 
-export default Register;
+Register.propTypes = {
+    registerUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps, {registerUser})(Register);
