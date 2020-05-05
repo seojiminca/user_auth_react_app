@@ -3,6 +3,7 @@ const router = express.Router();
 const userModel = require('../model/users');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const validateRegisterInput = require('../validation/register');
 
 //config/passport 함수를 사용해서 JWT을 검증한다.
 const checkAuth = passport.authenticate('jwt', {session: false});
@@ -23,6 +24,12 @@ function tokenGenerator(payload){ //token에 담길 내용만 보내기.
 router.post('/signup', (req,res) => {
     const {name, email, password } = req.body; //avatar, id 자동생성.
 
+    const {errors, isValid} = validateRegisterInput(req.body);
+
+    if(!isValid){
+        return res.status(400).json(errors);
+    }
+
     console.log(req.body);
 
     userModel
@@ -30,9 +37,8 @@ router.post('/signup', (req,res) => {
         .exec()
         .then(user => {
             if(user){
-                return res.json({
-                    email: "email already exists"
-                });
+                errors.email = "email already exists";
+                return res.json(errors);
             }
             //else 삭제
             const newUser = new userModel({
