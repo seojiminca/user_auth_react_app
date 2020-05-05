@@ -62,14 +62,14 @@ class Register extends Component {
                             <form onSubmit={this.onSubmit}>
                                 <TextFieldGroup
                                     type="name"
-                                    placeholder=""
+                                    placeholder="Name"
                                     onChange={this.onChange}
                                     value={name}
                                     name="name"
                                 />
                                 <TextFieldGroup
                                     type="email"
-                                    placeholder="email"
+                                    placeholder="Email"
                                     onChange={this.onChange}
                                     value={email}
                                     name="email"
@@ -82,14 +82,14 @@ class Register extends Component {
 
                                 <TextFieldGroup
                                     type="password"
-                                    placeholder="password"
+                                    placeholder="Password"
                                     onChange={this.onChange}
                                     value={password}
                                     name="password"
                                 />
                                 <TextFieldGroup
                                     type="password"
-                                    placeholder="password"
+                                    placeholder="Password"
                                     onChange={this.onChange}
                                     value={password2}
                                     name="password"
