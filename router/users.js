@@ -4,6 +4,7 @@ const userModel = require('../model/users');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const validateRegisterInput = require('../validation/register');
+const validateLoginInput = require('../validation/login');
 
 //config/passport 함수를 사용해서 JWT을 검증한다.
 const checkAuth = passport.authenticate('jwt', {session: false});
@@ -78,22 +79,30 @@ router.post('/signup', (req,res) => {
 router.post('/login', (req, res) => {
    const {email, password} = req.body;
 
+   const{errors, isValid} = validateLoginInput(req.body);
+
+   if(!isValid){
+       return res.status(400).json(errors);
+   }
+
    //email유무체크, password 매칭, 화면리턴 - jwt
    userModel
        .findOne({"local.email": email})
        .exec()
        .then(user => {
            if(!user){
-               return res.json({
-                  msg: "email doesnt exist"
-               });
+               errors.email = 'Email doesnt exist';
+               return res.json(errors);
+               // return res.json({
+               //    msg: "email doesnt exist"
+               // });
            }
            // user 존재.
            console.log(user);
 
            user.comparePassword(password, (err, isMatch) => { //isMatch 는 true/false 라서 따로 true명시 안해도됨.
                //console.log("isMatch is ",isMatch)
-               if(err) throw err;
+               if(err || isMatch === 'false') throw err;
 
                // JWT생성
               const payload = { id: user._id, name: user.local.name, avatar: user.local.avatar };
