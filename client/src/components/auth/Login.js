@@ -9,7 +9,7 @@ class Login extends Component {
         this.state = {
             email: null,
             password: null,
-            error: null
+            errors: null
         };
 
         this.onChange = this.onChange.bind(this);
@@ -32,12 +32,12 @@ class Login extends Component {
         axios
             .post('users/login', loginUser)
             .then(res => console.log(res.data))
-            .catch(err => this.setState({error: err.response.data}))
+            .catch(err => this.setState({errors: err.response.data}))
     }
 
     render() {
 
-        const {email, password} = this.state;
+        const {email, password, errors} = this.state;
 
         return (
             <div className="login">
@@ -49,7 +49,7 @@ class Login extends Component {
                                 login your account
                             </p>
 
-                            <form onSubmit={this.onSubmit}>
+                            <form noValidate onSubmit={this.onSubmit}>
 
                                 {/*<div className="form-group">*/}
                                 {/*    <input*/}
@@ -67,6 +67,7 @@ class Login extends Component {
                                     onChange={this.onChange}
                                     value={email}
                                     name="email"
+                                    // error={errors.email}
                                 />
                                 <TextFieldGroup
                                     type="password"
@@ -74,6 +75,7 @@ class Login extends Component {
                                     onChange={this.onChange}
                                     value={password}
                                     name="password"
+                                    // error={errors.password}
                                 />
 
                                 <input type="submit" className="btn btn-info btn-block mt-4" />

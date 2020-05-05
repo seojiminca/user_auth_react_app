@@ -11,7 +11,7 @@ class Register extends Component {
             email: '',
             password: '',
             password2: '',
-            error: {}
+            errors: {}
         };
 
         //데이터를 받아오기만 하는것이 아니라 사용자 입력값이 있으면 나머지 함수를 바인딩시킨다.
@@ -42,12 +42,12 @@ class Register extends Component {
         axios
             .post('users/signup', newUser)
             .then(res => console.log(res.data))
-            .catch(err => this.setState({error: err.response.data}))
+            .catch(err => this.setState({errors: err.response.data}))
     }
 
     render() {
 
-        const {name, email, password, password2, error} = this.state;
+        const {name, email, password, password2, errors} = this.state;
 
         return (
             <div className="register">
@@ -59,13 +59,14 @@ class Register extends Component {
                                 Create your DevConnector account
                             </p>
 
-                            <form onSubmit={this.onSubmit}>
+                            <form noValidate onSubmit={this.onSubmit}>
                                 <TextFieldGroup
                                     type="name"
                                     placeholder="Name"
                                     onChange={this.onChange}
                                     value={name}
                                     name="name"
+                                    error={errors.name}
                                 />
                                 <TextFieldGroup
                                     type="email"
@@ -73,6 +74,7 @@ class Register extends Component {
                                     onChange={this.onChange}
                                     value={email}
                                     name="email"
+                                    error={errors.email}
                                     info="This site uses Gravatar so if you want a profile image, use a Gravatar email"
                                 />
                                 {/*<small className="form-text text-muted">*/}
@@ -86,6 +88,7 @@ class Register extends Component {
                                     onChange={this.onChange}
                                     value={password}
                                     name="password"
+                                    error={errors.password}
                                 />
                                 <TextFieldGroup
                                     type="password"
@@ -93,6 +96,7 @@ class Register extends Component {
                                     onChange={this.onChange}
                                     value={password2}
                                     name="password"
+                                    error={errors.password2}
                                 />
                                 <input type="submit" className="btn btn-info btn-block mt-4" />
                             </form>
