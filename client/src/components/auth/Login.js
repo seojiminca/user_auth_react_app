@@ -37,7 +37,7 @@ class Login extends Component {
             password: this.state.password
         };
 
-        this.props.loginUser(loginUser, this.props.history);
+        this.props.loginUser(loginUser);
         //console.log(loginUser);
 
         // axios

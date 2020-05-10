@@ -1,5 +1,6 @@
-import {GET_ERRORS} from "./types";
+import {GET_ERRORS, SET_CURRENT_USER} from "./types";
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 
 //화면이동. 회원가입이 됐을떄 로그인페이지 이동.
 export const registerUser = (userData, history) => dispatch => {
@@ -18,7 +19,13 @@ export const registerUser = (userData, history) => dispatch => {
 export const loginUser = (userData, history) => dispatch => {
     axios
         .post('users/login', userData)
-        .then(res => history.push('/'))
+        .then(res => {
+            const {token} = res.data;
+
+            //Set token to localStorage
+            localStorage.setItem('jwtToken', token);
+
+        })
         .catch(err =>
             dispatch({
                 type: GET_ERRORS,
