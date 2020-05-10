@@ -8,8 +8,8 @@ class Login extends Component {
         super();
         this.state = {
             email: null,
-            password: null,
-            errors: null
+            password: null, //null은 내용이 아예 없음.
+            errors: {} //리셋.
         };
 
         this.onChange = this.onChange.bind(this);
@@ -67,7 +67,7 @@ class Login extends Component {
                                     onChange={this.onChange}
                                     value={email}
                                     name="email"
-                                    // error={errors.email}
+                                    error={errors.email}
                                 />
                                 <TextFieldGroup
                                     type="password"
@@ -75,9 +75,8 @@ class Login extends Component {
                                     onChange={this.onChange}
                                     value={password}
                                     name="password"
-                                    // error={errors.password}
+                                    error={errors.password}
                                 />
-
                                 <input type="submit" className="btn btn-info btn-block mt-4" />
                             </form>
                         </div>

@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import TextFieldGroup from "../common/TextFieldGroup";
 import {connect} from 'react-redux';
 import {registerUser} from "../../actions/authActions";
+import {withRouter} from 'react-router-dom'; //axios 삭제하고 redux에 맞게 이걸로 변경.
 
 class Register extends Component {
 
@@ -21,6 +21,13 @@ class Register extends Component {
         //지금 상태를 항상 onChange함수에 업데이트하기위한 부분.
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+
+    }
+
+    componentWillReceiveProps(nextProps){
+        if (nextProps.errors) {
+            this.setState({errors: nextProps.errors});
+        }
     }
 
     //수정을 위해서. 이것과 윗부분의 바인딩이 있어야 입력창에 입력이 가능함.
@@ -39,7 +46,8 @@ class Register extends Component {
             password: this.state.password,
             password2: this.state.password2
         };
-        this.props.registerUser(newUser);
+
+        this.props.registerUser(newUser, this.props.history);
         //console.log(newUser); //회원가입하고 개발자옵션에서 로그확인.
 
         //axios 이용해서 api보낸다.
@@ -119,11 +127,13 @@ class Register extends Component {
 
 Register.propTypes = {
     registerUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    errors: state.errors
 });
 
-export default connect(mapStateToProps, {registerUser})(Register);
+export default connect(mapStateToProps, {registerUser})(withRouter(Register)); //화면이동을 위해 withRouter 추가해줘.
