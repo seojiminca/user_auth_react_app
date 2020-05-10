@@ -23,6 +23,9 @@ class Login extends Component {
         if (nextProps.errors) {
             this.setState({errors: nextProps.errors});
         }
+        if (nextProps.auth.isAuthenticated) {
+            this.props.history.push('/dashboard');
+        }
     }
 
     onChange(e) {
@@ -53,6 +56,7 @@ class Login extends Component {
 
         return (
             <div className="login">
+                {user ? user.name : null}
                 <div className="container">
                     <div className="row">
                         <div className="col-md-8 m-auto">

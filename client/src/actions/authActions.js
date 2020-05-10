@@ -1,6 +1,7 @@
 import {GET_ERRORS, SET_CURRENT_USER} from "./types";
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
+import setAuthToken from "../utils/setAuthToken";
 
 //화면이동. 회원가입이 됐을떄 로그인페이지 이동.
 export const registerUser = (userData, history) => dispatch => {
@@ -25,6 +26,13 @@ export const loginUser = (userData, history) => dispatch => {
             //Set token to localStorage
             localStorage.setItem('jwtToken', token);
 
+            // Set token to Auth header
+            setAuthToken(token);
+
+            const decoded = jwt_decode(token);
+
+            dispatch(setCurrentUser(decoded));
+
         })
         .catch(err =>
             dispatch({
@@ -32,4 +40,11 @@ export const loginUser = (userData, history) => dispatch => {
                 payload:err.response.data
             })
         )
-}
+};
+
+export const setCurrentUser = decoded => {
+    return {
+        type: SET_CURRENT_USER,
+        payload: decoded
+    };
+};
