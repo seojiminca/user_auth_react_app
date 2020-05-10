@@ -19,6 +19,16 @@ class Login extends Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
+    //바로 token 검증하고 유효하면 로그인상태유지 그리고 바로 dashboard 로 이동.
+    componentDidMount() {
+        if(this.props.auth.isAuthenticated){
+            this.props.history.push('/dashboard');
+        }
+    }
+
+
+
+    // action 이후의 행동.
     componentWillReceiveProps(nextProps){
         if (nextProps.errors) {
             this.setState({errors: nextProps.errors});

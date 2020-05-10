@@ -48,3 +48,17 @@ export const setCurrentUser = decoded => {
         payload: decoded
     };
 };
+
+//token만 지우면 되니까 API는 필요없이 token만 지워주면 된다.
+export const logoutUser = () => dispatch => {
+
+    //Remove token from localstorage
+    localStorage.removeItem('jwtToken');
+
+    //Remove auth header for future requests
+    setAuthToken(false);
+
+    // Set current user to {} which will set isAuthenticated to false
+    dispatch(setCurrentUser({}));
+
+};
