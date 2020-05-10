@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 import TextFieldGroup from "../common/TextFieldGroup";
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {loginUser} from "../../actions/authActions";
+import { withRouter } from 'react-router-dom';
 
 class Login extends Component {
 
@@ -16,6 +19,12 @@ class Login extends Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
+    componentWillReceiveProps(nextProps){
+        if (nextProps.errors) {
+            this.setState({errors: nextProps.errors});
+        }
+    }
+
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value });
     }
@@ -27,17 +36,20 @@ class Login extends Component {
             email: this.state.email,
             password: this.state.password
         };
+
+        this.props.loginUser(loginUser, this.props.history);
         //console.log(loginUser);
 
-        axios
-            .post('users/login', loginUser)
-            .then(res => console.log(res.data))
-            .catch(err => this.setState({errors: err.response.data}))
+        // axios
+        //     .post('users/login', loginUser)
+        //     .then(res => console.log(res.data))
+        //     .catch(err => this.setState({errors: err.response.data}))
     }
 
     render() {
 
         const {email, password, errors} = this.state;
+        const {user} = this.props.auth;
 
         return (
             <div className="login">
@@ -87,4 +99,16 @@ class Login extends Component {
     }
 }
 
-export default Login;
+Login.propTypes = {
+    loginUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
+}
+
+//상태를 속성으로 던져주는 함수.
+const mapStateToProps = state => ({
+    auth: state.auth,
+    errors: state.errors
+})
+
+export default connect(mapStateToProps, {loginUser})(withRouter(Login));

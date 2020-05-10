@@ -14,3 +14,15 @@ export const registerUser = (userData, history) => dispatch => {
             })
         );
 };
+
+export const loginUser = (userData, history) => dispatch => {
+    axios
+        .post('users/login', userData)
+        .then(res => history.push('/'))
+        .catch(err =>
+            dispatch({
+                type: GET_ERRORS,
+                payload:err.response.data
+            })
+        )
+}
