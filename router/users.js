@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userModel = require('../model/users');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const validateRegisterInput = require('../validation/register');
 const validateLoginInput = require('../validation/login');
@@ -77,83 +78,129 @@ router.post('/signup', (req,res) => {
 //@desc login user route
 //@access Public
 router.post('/login', (req, res) => {
-   const {email, password} = req.body;
+    const { errors, isValid } = validateLoginInput(req.body);
 
-   const{errors, isValid} = validateLoginInput(req.body);
+    //check validation
+    if (!isValid) {
+        return res.status(400).json(errors);
+    }
 
-   if(!isValid){
-       return res.status(400).json(errors);
-   }
+    const {email, password} = req.body;
 
-   //email유무체크, password 매칭, 화면리턴 - jwt
-   userModel
-       .findOne({"local.email": email})
-       .exec()
-       .then(user => {
-           if(!user){
-               errors.email = 'Email doesnt exist';
-               return res.json(errors);
-               // return res.json({
-               //    msg: "email doesnt exist"
-               // });
-           }
-           // user 존재.
-           console.log(user);
+    // Find user by email
+    userModel
+        .findOne({ "local.email": email })
+        .then(user => {
+            console.log(user);
+            if (!user) {
+                errors.email = 'Users not found';
+                return res.status(404).json(errors);
+            }
+            bcrypt.compare(password, user.local.password)
+                .then(isMatch => {
+                    if (isMatch) {
 
-           user.comparePassword(password, (err, isMatch) => { //isMatch 는 true/false 라서 따로 true명시 안해도됨.
-               //console.log("isMatch is ",isMatch)
-               if(err || isMatch === 'false') throw err;
+                        // User Matched
+                        const payload = { id: user.id, name: user.name, avatar: user.avatar };
 
-               // JWT생성
-              const payload = { id: user._id, name: user.local.name, avatar: user.local.avatar };
+                        // Sign Token
+                        jwt.sign(
+                            payload,
+                            process.env.SECRET,
+                            { expiresIn: 3600 },
+                            (err, token) => {
+                                res.json({
+                                    success: true,
+                                    token: 'Bearer ' + token
+                                });
+                            }
+                        );
 
-              res.status(200).json({
-                  success: isMatch,
-                  token: tokenGenerator(payload)
-              });
-
-               // jwt.sign(
-               //     payload,
-               //     process.env.SECRET,
-               //     { expiresIn: 36000 },
-               //     (err, token) => {
-               //         res.json({
-               //            success: true,
-               //            tokenInfo: "Bearer " + token
-               //         });
-               //     }
-               // );
-           })
-           // bcrypt.compare(password, user.local.password, (err, result) => {
-           //     console.log(result);
-           //     if(err){
-           //         return res.json({
-           //             msg: "password is not matched"
-           //         });
-           //     }else{
-           //
-           //         // JWT생성
-           //        const payload = { id: user._id, name: user.name, avatar: user.avatar };
-           //
-           //         jwt.sign(
-           //             payload,
-           //             process.env.SECRET,
-           //             { expiresIn: 36000 },
-           //             (err, token) => {
-           //                 res.json({
-           //                    success: true,
-           //                    tokenInfo: "Bearer " + token
-           //                 });
-           //             }
-           //         );
-           //     }
-           // })
-       })
-       .catch(err => {
-          res.json({
-             error: err
-          });
-       });
+                    } else {
+                        errors.password = 'Password incorrect';
+                        return res.status(400).json(errors);
+                    }
+                })
+                .catch(err => res.json(err));
+        })
+        .catch(err => res.json(err));
+   // const {email, password} = req.body;
+   //
+   // const{errors, isValid} = validateLoginInput(req.body);
+   //
+   // if(!isValid){
+   //     return res.status(400).json(errors);
+   // }
+   //
+   // //email유무체크, password 매칭, 화면리턴 - jwt
+   // userModel
+   //     .findOne({"local.email": email})
+   //     .exec()
+   //     .then(user => {
+   //         if(!user){
+   //             errors.email = 'Email doesnt exist';
+   //             return res.json(errors);
+   //             // return res.json({
+   //             //    msg: "email doesnt exist"
+   //             // });
+   //         }
+   //         // user 존재.
+   //         console.log(user);
+   //
+   //         user.comparePassword(password, (err, isMatch) => { //isMatch 는 true/false 라서 따로 true명시 안해도됨.
+   //             //console.log("isMatch is ",isMatch)
+   //             if(err || isMatch === 'false') throw err;
+   //
+   //             // JWT생성
+   //            const payload = { id: user._id, name: user.local.name, avatar: user.local.avatar };
+   //
+   //            res.status(200).json({
+   //                success: isMatch,
+   //                token: tokenGenerator(payload)
+   //            });
+   //
+   //             // jwt.sign(
+   //             //     payload,
+   //             //     process.env.SECRET,
+   //             //     { expiresIn: 36000 },
+   //             //     (err, token) => {
+   //             //         res.json({
+   //             //            success: true,
+   //             //            tokenInfo: "Bearer " + token
+   //             //         });
+   //             //     }
+   //             // );
+   //         })
+   //         // bcrypt.compare(password, user.local.password, (err, result) => {
+   //         //     console.log(result);
+   //         //     if(err){
+   //         //         return res.json({
+   //         //             msg: "password is not matched"
+   //         //         });
+   //         //     }else{
+   //         //
+   //         //         // JWT생성
+   //         //        const payload = { id: user._id, name: user.name, avatar: user.avatar };
+   //         //
+   //         //         jwt.sign(
+   //         //             payload,
+   //         //             process.env.SECRET,
+   //         //             { expiresIn: 36000 },
+   //         //             (err, token) => {
+   //         //                 res.json({
+   //         //                    success: true,
+   //         //                    tokenInfo: "Bearer " + token
+   //         //                 });
+   //         //             }
+   //         //         );
+   //         //     }
+   //         // })
+   //     })
+   //     .catch(err => {
+   //        res.json({
+   //           error: err
+   //        });
+   //     });
 
 });
 
