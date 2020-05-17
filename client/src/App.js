@@ -54,7 +54,7 @@ function App() {
                         </Switch>
                         <Switch>
                             <ProvateRoute
-                                exact path="/createProfile"
+                                exact path="/create-profile"
                                 component={CreateProfile}
                             />
                         </Switch>

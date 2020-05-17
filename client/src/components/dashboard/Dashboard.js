@@ -23,7 +23,7 @@ class Dashboard extends Component {
         if(profile === null || loading) {
             dashboardContent = <Spinner />
         }else{
-            if(Object.keys(profile).length > 0){
+            if(Object.keys(profile).length < 0){
                 dashboardContent = <h4>TODO: Display Profile</h4>
             }else{
                 dashboardContent = (
