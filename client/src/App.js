@@ -12,9 +12,9 @@ import "./App.css";
 import {Provider} from 'react-redux'
 import store from './store';
 import Dashboard from "./components/dashboard/Dashboard";
-
-import ProvateRoute from "./components/common/ProvateRoute";
+import CreateProfile from "./components/create-profile/CreateProfile";
 import PrivateRoute from "./components/common/ProvateRoute";
+import ProvateRoute from "./components/common/ProvateRoute";
 
 if(localStorage.jwtToken) {
     setAuthToken(localStorage.jwtToken);
@@ -50,6 +50,12 @@ function App() {
                             <PrivateRoute
                                 exact path="/dashboard"
                                 component={Dashboard}
+                            />
+                        </Switch>
+                        <Switch>
+                            <ProvateRoute
+                                exact path="/createProfile"
+                                component={CreateProfile}
                             />
                         </Switch>
                     </div>
