@@ -2,8 +2,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
 import TextFieldGroup from "../common/TextFieldGroup";
 import SelectListGroup from "../common/SelectListGroup";
+import { createProfile } from "../../actions/profileActions";
 
 class CreateProfile extends Component {
 
@@ -41,6 +43,9 @@ class CreateProfile extends Component {
             travelHistory: this.state.travelHistory,
         }
         console.log(newProfile)
+
+        //네트워크태우기.
+        this.props.createProfile(newProfile, this.props.history);
     }
 
     onChange(e) {
@@ -156,4 +161,4 @@ const mapStateToProps = state => ({
     errors: state.errors
 })
 
-export default connect(null)(CreateProfile);
+export default connect(mapStateToProps, {createProfile})(withRouter(CreateProfile));
