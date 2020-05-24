@@ -5,7 +5,7 @@ const postSchema = new mongoose.Schema(
         profile:{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'profile',
-            required: true
+            //required: true
         },
         user:{
             type: mongoose.Schema.Types.ObjectId,

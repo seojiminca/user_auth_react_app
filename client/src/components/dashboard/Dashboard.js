@@ -3,13 +3,18 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux'
 import {Link} from "react-router-dom";
-import {getCurrentProfile} from "../../actions/profileActions";
+import {getCurrentProfile, deleteAccount} from "../../actions/profileActions";
 import Spinner from "../common/Spinner";
+import ProfileActions from "./ProfileActions";
 
 class Dashboard extends Component {
 
     componentDidMount() {
         this.props.getCurrentProfile();
+    }
+
+    onDeleteClick(e) {
+        this.props.deleteAccount();
     }
 
     render() {
@@ -23,14 +28,32 @@ class Dashboard extends Component {
         if(profile === null || loading) {
             dashboardContent = <Spinner />
         }else{
-            if(Object.keys(profile).length < 0){
-                dashboardContent = <h4>TODO: Display Profile</h4>
+            if(Object.keys(profile).length > 0){
+                dashboardContent = (
+                    <div>
+                        <p className='lead text-muted'>
+                            Welcome {user.name}
+                        </p>
+                        <ProfileActions />
+                        <div style={{marginBottom:'60px'}}/>
+                        <button
+                            onClick={this.onDeleteClick.bind(this)}
+                            className="btn btn-danger"
+                        >
+                            Delete my account
+                        </button>
+                        <Link to="/post" classname="btn btn-lg btn-info">Go to Post</Link>
+
+                    </div>
+                )
             }else{
                 dashboardContent = (
                     <div>
                         <p className="lead text-muted">Welcome {user.name}</p>
                         <p>You have not yet setup a profile, please add some info</p>
                         <Link to="/create-profile" classname="btn btn-lg btn-info">Create Profile</Link>
+                        <Link to="/post" classname="btn btn-lg btn-info">Go to Post</Link>
+
                     </div>
                 )
             }
@@ -62,4 +85,4 @@ const mapStateToProps = state => ({
    auth: state.auth
 });
 
-export default connect(mapStateToProps, {getCurrentProfile})(Dashboard);
+export default connect(mapStateToProps, {getCurrentProfile, deleteAccount})(Dashboard);

@@ -73,13 +73,13 @@ router.post('/', checkAuth, upload.single('photo'), (req, res) => {
         .exec()
         .then(profile => {
 
-            // console.log(user)
+            console.log(user)
 
-            if(!profile){
-                return res.json({
-                    post: "profile is needed"
-                });
-            }
+            // if(!profile){
+            //     return res.json({
+            //         post: "profile is needed"
+            //     });
+            // }
 
             const newPost = new postModel({
                 profile: profile._id, //검색된 프로필에서 id
