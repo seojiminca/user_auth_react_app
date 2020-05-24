@@ -13,8 +13,7 @@ import {Provider} from 'react-redux'
 import store from './store';
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/create-profile/CreateProfile";
-import PrivateRoute from "./components/common/ProvateRoute";
-import ProvateRoute from "./components/common/ProvateRoute";
+import PrivateRoute from "./components/common/PrivateRoute";
 
 if(localStorage.jwtToken) {
     setAuthToken(localStorage.jwtToken);
@@ -53,7 +52,7 @@ function App() {
                             />
                         </Switch>
                         <Switch>
-                            <ProvateRoute
+                            <PrivateRoute
                                 exact path="/create-profile"
                                 component={CreateProfile}
                             />
