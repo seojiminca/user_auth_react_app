@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import TextFieldGroup from "../common/TextFieldGroup";
+import SelectListGroup from "../common/SelectListGroup";
 
 class CreateProfile extends Component {
 
@@ -47,7 +48,23 @@ class CreateProfile extends Component {
     }
 
 
+
     render() {
+        const languageOpt = [
+            {label: '* Select Language', value: 0},
+            {label: 'Korean', value: 'Korean'},
+            {label: 'English', value: 'English'},
+            {label: 'Chinese', value: 'Chinese'},
+            {label: 'Spanish', value: 'Spanish'},
+        ];
+
+        const nationalityOpt = [
+            {label: '* Select nationality', value: 0},
+            {label: 'Korean', value: 'Korean'},
+            {label: 'English', value: 'English'},
+            {label: 'Chinese', value: 'Chinese'},
+        ]
+
         return (
             <div className="create-profile">
                 <div className="container">
@@ -59,17 +76,23 @@ class CreateProfile extends Component {
                             </p>
                             <small className="d-block pb-3">* = required fields</small>
                             <form onSubmit={this.onSubmit}>
-                                <TextFieldGroup
+                                {/*<TextFieldGroup*/}
+                                {/*    onChange={this.onChange}*/}
+                                {/*    value={this.state.language}*/}
+                                {/*    name="language"*/}
+                                {/*    placeholder="language"*/}
+                                {/*/>*/}
+                                <SelectListGroup
+                                    options={languageOpt}
                                     onChange={this.onChange}
-                                    value={this.state.language}
                                     name="language"
-                                    placeholder="language"
+                                    value={this.state.language}
                                 />
-                                <TextFieldGroup
+                                <SelectListGroup
+                                    options={nationalityOpt}
                                     onChange={this.onChange}
-                                    value={this.state.nationality}
                                     name="nationality"
-                                    placeholder="nationality"
+                                    value={this.state.nationality}
                                 />
                                 <TextFieldGroup
                                     onChange={this.onChange}
