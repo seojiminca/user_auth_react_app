@@ -206,7 +206,7 @@ module.exports = passport => {
 //             cb(err, false, err.message);
 //         }
 //     }));
-// };
+ };
 
 
 
