@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const app = express();
 const passport = require('passport');
+const path = require('path');
 
 const userRouter = require("./router/users");
 const profileRouter = require("./router/profiles");
@@ -29,6 +30,14 @@ app.use('/profiles', profileRouter);
 app.use('/admin', adminRouter);
 app.use('/posts', postRouter);
 
-const port = process.env.PORT;
+if(process.env.NODE_ENV === 'production'){
+    app.use(express.static('client/build'));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+    })
+}
+
+const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log(`Server running on port ${port}`)); // ``로 자바스크립트 불러오기
