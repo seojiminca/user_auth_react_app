@@ -58,12 +58,12 @@ function App() {
                                 component={CreateProfile}
                             />
                         </Switch>
-                        <Switch>
-                            <PrivateRoute
-                                exact path="/post"
-                                component={Post}
-                            />
-                        </Switch>
+                        {/*<Switch>*/}
+                        {/*    <PrivateRoute*/}
+                        {/*        exact path="/post"*/}
+                        {/*        component={Post}*/}
+                        {/*    />*/}
+                        {/*</Switch>*/}
                     </div>
                     <Footer/>
                 </div>
