@@ -14,7 +14,6 @@ import store from './store';
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/create-profile/CreateProfile";
 import PrivateRoute from "./components/common/PrivateRoute";
-import Post from "./components/dashboard/Post";
 
 if(localStorage.jwtToken) {
     setAuthToken(localStorage.jwtToken);
