@@ -30,7 +30,7 @@ app.use('/profiles', profileRouter);
 app.use('/admin', adminRouter);
 app.use('/posts', postRouter);
 
-if(process.env.NODE_ENV === 'production'){
+if(process.env.NODE_ENV || "production" === 'production'){
     app.use(express.static('client/build'));
 
     app.get('*', (req, res) => {
